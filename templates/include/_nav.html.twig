@@ -1,7 +1,7 @@
 <header>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="">Newspaper</a>
+			<a class="navbar-brand" href="{{ path('default_home') }}">Newspaper</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -13,17 +13,17 @@
 
 					{% if not app.user %}
 						<li class="nav-item">
-							<a class="nav-link" href="">S'inscrire</a>
+							<a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="">Se connecter</a>
+							<a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
 						</li>
 					{% else %}
 						<li class="nav-item">
 							<a class="nav-link" href="">Espace perso</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="">Se déconnecter</a>
+							<a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
 						</li>
 					{% endif %}
 

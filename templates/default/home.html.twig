@@ -1,15 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Newspaper
+	Accueil
 {% endblock %}
 
 {% block body %}
 
 
-	<h1 class="test-center my-4">Hello vous etes sur Newspaper</h1>
+	<h1 class="test-center my-4">Tous les articles</h1>
 
+	<div class="row">
 
+		<div class="col-10 mx-auto my-4">
+
+			{% include 'include/_flashes.html.twig' %}
+
+		</div>
+	</div>
 
 
 {% endblock %}
