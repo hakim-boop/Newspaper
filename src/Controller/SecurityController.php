@@ -47,6 +47,7 @@ class SecurityController extends AbstractController
             ->handleRequest($request);
 
         if ($form->isSubmitted()  && $form->isValid()) {
+            
             $user->setCreatedAt(new DateTime());
             $user->setUpdatedAt(new DateTime());
             $user->setRoles(["ROLE_USER"]);
