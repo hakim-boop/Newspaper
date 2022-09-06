@@ -13,9 +13,8 @@ class AppFixtures extends Fixture
     public function __construct(SluggerInterface $slugger)
     {
         $this->$slugger = $slugger;
-
-       
     }
+
     public function load(ObjectManager $manager): void
     {
         $categories = [
@@ -29,9 +28,9 @@ class AppFixtures extends Fixture
             'Mode',
             'Société'
         ];
-        
+
         foreach ($categories as $name) {
-            
+
             $category = new Category();
 
             $category->setName($name);
@@ -41,17 +40,12 @@ class AppFixtures extends Fixture
             $category->setUpdatedAt(new DateTime());
 
             # La méthode persist() exécute
-            $manager->persist($category);  
-
-
-
+            $manager->persist($category);
         }
         # La méthode flush() n'est pas dans la boucle foreach() pour une raison :
         # => cette méthode "vide" l'objet $manager qui est un 'container'.
         # Avant de se 'vider', le $manager exécute les insertions en BDD, pour de vrai cette fois ci !
 
         $manager->flush();
-
     }
-
 }

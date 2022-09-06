@@ -28,4 +28,18 @@ class AdminController extends AbstractController
         ]);
     }// end function show()
 
+    #[Route('/voir-les-archives', name: 'show_archives', methods: ['GET'])]
+    public function showArchives(EntityManagerInterface $entityManager): Response
+    {
+        $categories = $entityManager->getRepository(Category::class)->findAllArchived();
+        $articles = $entityManager->getRepository(Article::class)->findAllArchived();
+        $users = $entityManager->getRepository(User::class)->findAllArchived();
+
+        return $this->render('admin/show_archives.html.twig', [
+            'articles' => $articles
+        ]);
+  
+    }
+
+
 }// end class

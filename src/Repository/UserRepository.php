@@ -55,6 +55,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $this->add($user, true);
     }
+    
+    public function findAllArchived(string $order = 'ASC')
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.deletedAt IS NOT NULL')
+            ->orderBy('c.deletedAt', $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return User[] Returns an array of User objects

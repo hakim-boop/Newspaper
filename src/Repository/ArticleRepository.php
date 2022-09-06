@@ -38,6 +38,15 @@ class ArticleRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function findAllArchived(string $order = 'ASC')
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.deletedAt IS NOT NULL')
+            ->orderBy('c.deletedAt', $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return Article[] Returns an array of Article objects
