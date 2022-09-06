@@ -14,31 +14,29 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-
 class RegisterFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Choisisser un email',
+                'label' => 'Choisissez un email',
                 'constraints' => [
                     new Email(),
                     new Length([
                         'min' => 4,
                         'max' => 255
-
-                    ])
+                    ]),
                 ],
             ])
             ->add('password', PasswordType::class, [
-                'label' => "Choisisser un mot de passe",
+                'label' => "Choisissez un mot de passe",
                 'constraints' => [
                     new NotBlank(),
                     new Length([
                         'min' => 4,
                         'max' => 255
-                    ])
+                    ]),
                 ],
             ])
             ->add('firstname', TextType::class, [
@@ -53,7 +51,8 @@ class RegisterFormType extends AbstractType
                 'attr' => [
                     'class' => 'd-block mx-auto my-3 col-4 btn btn-primary',
                 ],
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

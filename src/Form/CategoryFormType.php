@@ -1,14 +1,15 @@
 <?php
+
 namespace App\Form;
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class CategoryFormType extends AbstractType
 {
@@ -19,20 +20,20 @@ class CategoryFormType extends AbstractType
                 'label' => 'Nom',
                 'constraints' => [
                     new NotBlank(),
-                    new length([
+                    new Length([
                         'min' => 3,
                         'max' => 100
-                    ])
-                ]
+                    ]),
+                ],
             ])
-
             ->add('submit', SubmitType::class, [
-                'label' => $options['category'] ? "Modifier" . $options['category']->getName() : "Ajouter",
+                'label' => $options['category'] ? "Modifier " . $options['category']->getName() : "Ajouter",
                 'validate' => false,
                 'attr' => [
-                    'class' => 'd-block mx-auto my-3 col-4 btn btn-primary',
+                    'class' => 'd-block mx-auto my-3 col-6 btn btn-primary',
                 ],
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -40,7 +41,6 @@ class CategoryFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Category::class,
             'category' => null
-        
         ]);
     }
 }

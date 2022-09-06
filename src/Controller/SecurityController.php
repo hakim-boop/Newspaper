@@ -2,17 +2,16 @@
 
 namespace App\Controller;
 
-use DateTime;
 use App\Entity\User;
 use App\Form\RegisterFormType;
 use App\Repository\UserRepository;
+use DateTime;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
@@ -37,32 +36,34 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    // pas index: string no index, index name: 'string', index methods: [array de 'string',]
-    #[Route(path: '/inscription', name: 'app_register', methods: ['GET', 'POST'])]
-    public function register(Request $request, UserRepository $Repository, UserPasswordHasherInterface $passwordHasher): Response
+    //  pas index: 'string', index name: 'string', index methods: [array de 'string', 'param2']
+    #[Route('/inscription', name: 'app_register', methods: ['GET', 'POST'])]
+    public function register(Request $request, UserRepository $repository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
 
         $form = $this->createForm(RegisterFormType::class, $user)
             ->handleRequest($request);
 
-        if ($form->isSubmitted()  && $form->isValid()) {
-            
+        if ($form->isSubmitted() && $form->isValid()) {
+
             $user->setCreatedAt(new DateTime());
             $user->setUpdatedAt(new DateTime());
             $user->setRoles(["ROLE_USER"]);
 
             $user->setPassword(
-                $passwordHasher->hashPassword($user, $user->getPassword())
+                $passwordHasher->hashPassword( $user, $user->getPassword() )
             );
 
-            //Cette ligne fait un persist() + flush()
-            $Repository->add($user, true);
+            // Cette ligne fait un persist() + un flush() en 1 seule ligne
+            $repository->add($user, true);
 
-            $this->addFlash('success', "Vous vous êtes inscrit a");
+            $this->addFlash('success', "Vous êtes inscrit avec succès ! Bienvenue ☺");
+            return $this->redirectToRoute('app_login');
         }
+
         return $this->render('security/register.html.twig', [
             'form' => $form->createView()
         ]);
     }
-}
+}// end class

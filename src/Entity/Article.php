@@ -2,28 +2,29 @@
 
 namespace App\Entity;
 
+use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ArticleRepository;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
-{   // Pour utiliser les Traits de Gedmo, vous devrez faire un 'composer require gedmo/doctrine-extensions'
-        // vous devrez faire un 'composer require gedmo/doctrine-extensions'.
+{
+    // Pour utiliser les Traits de Gedmo,
+    // vous devrez faire un 'composer require gedmo/doctrine-extensions'.
     /*
      Ces deux 'use' sont des "traits", cela permet de faire comme un 'include'
-     mais pour une Class. 
+     mais pour une Class.
      Ces instructions ajoutent 3 propriétés à la class Article :
-        $createdAt
-        $updatedAt
-        $deletedAt
-    
+       - $createdAt
+       - $updatedAt
+       - $deletedAt
     Mais aussi les getters/setters appropriés.
      */
 
-    
+
     use TimestampableEntity;
     use SoftDeleteableEntity;
 
@@ -52,6 +53,10 @@ class Article
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
+
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
@@ -111,7 +116,7 @@ class Article
         return $this->photo;
     }
 
-    public function setPhoto(string $photo): self
+    public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
 
@@ -126,6 +131,18 @@ class Article
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
