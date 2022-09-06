@@ -6,8 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+
+
+use App\Repository\UserRepository;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
