@@ -133,10 +133,10 @@ class AdminController extends AbstractController
         } catch (FileException $exception) {
             // code à exécuter si erreur.
         }
-    } // end of fonction handleFile()
+    }// end function handleFile()
 
     #[Route('/archiver-un-article/{id}', name: 'soft_delete_article', methods: ['GET'])]
-    private function softDeleteArticle(Article $article, ArticleRepository $repository): RedirectResponse
+    public function softDeleteArticle(Article $article, ArticleRepository $repository): RedirectResponse
     {
         $article->setDeletedAt(new DateTime());
 
@@ -144,10 +144,10 @@ class AdminController extends AbstractController
 
         $this->addFlash('success', "L'article a bien été archivé. Voir les archives !");
         return $this->redirectToRoute('show_dashboard');
-    }
+    }// end function softDelete()
 
     #[Route('/restaurer-un-article/{id}', name: 'restore_article', methods: ['GET'])]
-    private function restoreArticle(Article $article, ArticleRepository $repository): RedirectResponse
+    public function restoreArticle(Article $article, ArticleRepository $repository): RedirectResponse
     {
         $article->setDeletedAt(null);
 
@@ -155,25 +155,22 @@ class AdminController extends AbstractController
 
         $this->addFlash('success', "L'article a bien été restauré !");
         return $this->redirectToRoute('show_archives');
-    }
-    
+    }// end function restoreArticle()
+
     #[Route('/supprimer-un-article/{id}', name: 'hard_delete_article', methods: ['GET'])]
-    private function hardDeleteArticle(Article $article, ArticleRepository $repository): RedirectResponse
+    public function hardDeleteArticle(Article $article, ArticleRepository $repository): RedirectResponse
     {
         $photo = $article->getPhoto();
 
         if ($photo){
-            // Pour supprimer un fichier dans le système, on utilise la fontion native de PHP unlink().
-            unlink($this->getParameter('uploads_dir') .'/'. $photo);
+            // Pour supprimer un fichier dans le système, on utilise la fonction native de PHP unlink().
+            unlink($this->getParameter('uploads_dir') . '/' . $photo);
         }
-
 
         $repository->remove($article, true);
 
-        $this->addFlash('success', "L'article a bien été supprimé d&finitivement !");
+        $this->addFlash('success', "L'article a bien été supprimé définitivement du système !");
         return $this->redirectToRoute('show_archives');
     }
-
-
 
 }// end class
