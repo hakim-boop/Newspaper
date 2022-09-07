@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -132,6 +133,47 @@ class AdminController extends AbstractController
         } catch (FileException $exception) {
             // code à exécuter si erreur.
         }
+    } // end of fonction handleFile()
+
+    #[Route('/archiver-un-article/{id}', name: 'soft_delete_article', methods: ['GET'])]
+    private function softDeleteArticle(Article $article, ArticleRepository $repository): RedirectResponse
+    {
+        $article->setDeletedAt(new DateTime());
+
+        $repository->add($article, true);
+
+        $this->addFlash('success', "L'article a bien été archivé. Voir les archives !");
+        return $this->redirectToRoute('show_dashboard');
     }
+
+    #[Route('/restaurer-un-article/{id}', name: 'restore_article', methods: ['GET'])]
+    private function restoreArticle(Article $article, ArticleRepository $repository): RedirectResponse
+    {
+        $article->setDeletedAt(null);
+
+        $repository->add($article, true);
+
+        $this->addFlash('success', "L'article a bien été restauré !");
+        return $this->redirectToRoute('show_archives');
+    }
+    
+    #[Route('/supprimer-un-article/{id}', name: 'hard_delete_article', methods: ['GET'])]
+    private function hardDeleteArticle(Article $article, ArticleRepository $repository): RedirectResponse
+    {
+        $photo = $article->getPhoto();
+
+        if ($photo){
+            // Pour supprimer un fichier dans le système, on utilise la fontion native de PHP unlink().
+            unlink($this->getParameter('uploads_dir') .'/'. $photo);
+        }
+
+
+        $repository->remove($article, true);
+
+        $this->addFlash('success', "L'article a bien été supprimé d&finitivement !");
+        return $this->redirectToRoute('show_archives');
+    }
+
+
 
 }// end class
