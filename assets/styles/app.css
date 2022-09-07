@@ -1,3 +1,14 @@
+*, :before, :after {
+    marin: 0 ;
+    padding: 0 ;
+    box-sizing: border-box ;
+}
+
 body {
-    background-color: lightgray;
+    background-color: lightgray !important;
+}
+
+item-hover:hover {
+    color: #ffc107 !important;
+    border-bottom: 2px black solid !important;
 }
