@@ -1,12 +1,11 @@
 <div class="row">
     <p class="d-flex justify-content-around">
+
         {% for category in categories %}
-            <span class="">
-                <a href="#" class="text-decoration-none text-warning">{{ category.name }}</a>
+            <span>
+                <a href="{{ path('show_articles_from_category', {'alias': category.alias}) }}" class="text-decoration-none text-muted item-hover">{{ category.name }}</a>
             </span>
-
         {% endfor %}
-    
-    </p>
 
+    </p>
 </div>

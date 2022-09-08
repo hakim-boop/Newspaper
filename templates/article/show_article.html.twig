@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-10 mx-auto my-4">
+            {% include 'include/_flashes.html.twig' %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10 mx-auto mb-4">
+
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center card-title mb-5">{{ article.title }}</h1>
+                    <h4 class="text-center text-secondary mb-3">{{ article.subtitle }}</h4>
+                </div>
+                <ul class="list-group list-group flush">
+                    <li class="list-group-item text-center text-muted">Crée {{ article.createdAt | ago(locale='fr') }} | Par <u class="text-underline">{{ article.author.fullname }}</u></li>
+                </ul>
+                <img src="{{ asset('uploads/' ~ article.photo) }}" alt="{{ article.title }}" class="img-custom2">
+                <div class="card-body">
+                    <p class="card-text col-8 mx-auto my-4 text-center">{{ article.content | raw }}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {{ render(url('add_commentary', {'id': article.id})) }}
+
+    <div class="row">
+        <div class="col-6 mx-auto">
+
+            <h3 class="mb-5">Espace Commentaires :</h3>
+
+            {% for commentary in commentaries | reverse %}
+
+                <div class="alert alert-dark mb-3" role="alert">
+                    <h4 class="alert-heading">{{ commentary.author.fullname }} <span class="h6">posté {{ commentary.createdAt | ago(locale='fr') }}</span></h4>
+                    <p>{{ commentary.comment }}</p>
+                    <hr>
+                    <p class="mb-0">Partager :
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    </p>
+                </div>
+
+            {% else %}
+
+            <div class="alert alert-warning mb-3" role="alert">
+                <p class="text-center fw-bolder">Aucun commentaire pour cet article</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}
+

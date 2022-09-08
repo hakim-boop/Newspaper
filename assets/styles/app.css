@@ -11,4 +11,12 @@ body {
 item-hover:hover {
     color: #ffc107 !important;
     border-bottom: 2px black solid !important;
+    transition: ease-in-out 0.1s;
+}
+
+
+.img-custom {
+    object-fit: cover !important;
+    width: 375px !important;
+    height: 210px !important;
 }
