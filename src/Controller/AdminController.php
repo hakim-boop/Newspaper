@@ -2,21 +2,25 @@
 
 namespace App\Controller;
 
+use DateTime;
+use App\Entity\User;
 use App\Entity\Article;
 use App\Entity\Category;
-use App\Entity\User;
+use App\Entity\Commentary;
 use App\Form\ArticleFormType;
+use App\Form\CommentaryFormType;
+use Doctrine\ORM\Mapping\Entity;
 use App\Repository\ArticleRepository;
-use DateTime;
+use App\Repository\CommentaryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/admin')]
 class AdminController extends AbstractController
@@ -34,7 +38,7 @@ class AdminController extends AbstractController
             'categories' => $categories,
             'users' => $users
         ]);
-    }// end function show()
+    } // end function show()
 
     #[Route('/voir-les-archives', name: 'show_archives', methods: ['GET'])]
     public function showArchives(EntityManagerInterface $entityManager): Response
@@ -58,17 +62,17 @@ class AdminController extends AbstractController
         $form = $this->createForm(ArticleFormType::class, $article)
             ->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $article->setCreatedAt(new DateTime());
             $article->setUpdatedAt(new DateTime());
-            $article->setAlias($slugger->slug($article->getTitle()) );
+            $article->setAlias($slugger->slug($article->getTitle()));
             $article->setAuthor($this->getUser());
 
             /** @var UploadedFile $photo */
             $photo = $form->get('photo')->getData();
 
-            if($photo){
+            if ($photo) {
                 $this->handleFile($photo, $slugger, $article);
             } // end if $photo
 
@@ -76,12 +80,12 @@ class AdminController extends AbstractController
 
             $this->addFlash('success', "L'article a bien été ajouté, il est en ligne !");
             return $this->redirectToRoute('show_dashboard');
-        }// end if $form
+        } // end if $form
 
         return $this->render('admin/form/article.html.twig', [
             'form' => $form->createView()
         ]);
-    }// end function create()
+    } // end function create()
 
     #[Route('/modifier-un-article/{id}', name: 'update_article', methods: ['GET', 'POST'])]
     public function updateArticle(Article $article, Request $request, ArticleRepository $repository, SluggerInterface $slugger): Response
@@ -92,27 +96,26 @@ class AdminController extends AbstractController
             'photo' => $originalPhoto
         ])->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $article->setUpdatedAt(new DateTime());
-            $article->setAlias($slugger->slug($article->getTitle()) );
+            $article->setAlias($slugger->slug($article->getTitle()));
             $article->setAuthor($this->getUser());
 
             /** @var UploadedFile $photo */
             $photo = $form->get('photo')->getData();
 
-            if($photo){
+            if ($photo) {
                 $this->handleFile($photo, $slugger, $article);
-            }
-            else {
+            } else {
                 $article->setPhoto($originalPhoto);
-            }// end if $photo
+            } // end if $photo
 
             $repository->add($article, true);
 
             $this->addFlash('success', "L'article a bien été ajouté, il est en ligne !");
             return $this->redirectToRoute('show_dashboard');
-        }// end if $form
+        } // end if $form
 
         return $this->render('admin/form/article.html.twig', [
             'form' => $form->createView(),
@@ -133,7 +136,7 @@ class AdminController extends AbstractController
         } catch (FileException $exception) {
             // code à exécuter si erreur.
         }
-    }// end function handleFile()
+    } // end function handleFile()
 
     #[Route('/archiver-un-article/{id}', name: 'soft_delete_article', methods: ['GET'])]
     public function softDeleteArticle(Article $article, ArticleRepository $repository): RedirectResponse
@@ -144,7 +147,7 @@ class AdminController extends AbstractController
 
         $this->addFlash('success', "L'article a bien été archivé. Voir les archives !");
         return $this->redirectToRoute('show_dashboard');
-    }// end function softDelete()
+    } // end function softDelete()
 
     #[Route('/restaurer-un-article/{id}', name: 'restore_article', methods: ['GET'])]
     public function restoreArticle(Article $article, ArticleRepository $repository): RedirectResponse
@@ -155,14 +158,14 @@ class AdminController extends AbstractController
 
         $this->addFlash('success', "L'article a bien été restauré !");
         return $this->redirectToRoute('show_archives');
-    }// end function restoreArticle()
+    } // end function restoreArticle()
 
     #[Route('/supprimer-un-article/{id}', name: 'hard_delete_article', methods: ['GET'])]
     public function hardDeleteArticle(Article $article, ArticleRepository $repository): RedirectResponse
     {
         $photo = $article->getPhoto();
 
-        if ($photo){
+        if ($photo) {
             // Pour supprimer un fichier dans le système, on utilise la fonction native de PHP unlink().
             unlink($this->getParameter('uploads_dir') . '/' . $photo);
         }
@@ -172,5 +175,5 @@ class AdminController extends AbstractController
         $this->addFlash('success', "L'article a bien été supprimé définitivement du système !");
         return $this->redirectToRoute('show_archives');
     }
-
+           
 }// end class

@@ -48,6 +48,10 @@
                         <a href="#"><i class="fa-brands fa-instagram"></i></a>
                         <a href="#"><i class="fa-brands fa-twitter"></i></a>
                         <a href="#"><i class="fa-brands fa-facebook"></i></a>
+
+                        {% if app.user is same as commentary.author %}
+                            <a href="{{ path('soft_delete_commentary', {'id': commentary.id}) }}?article_id={{ article.id }}" class="text-danger" title="Archiver le commentaire ?" onclick="return confirm('Voulez-vous archiver ce commentaire ?')"><i class="fa fa-trash"></i></a>
+                        {% endif %}
                     </p>
                 </div>
 
