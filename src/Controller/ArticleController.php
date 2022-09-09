@@ -20,7 +20,7 @@ class ArticleController extends AbstractController
             'category' => $category->getId()
         ]);
 
-        return $this->render('article/show_articles_from_categories.html.twig', [
+        return $this->render('article/show_articles_from_categories.html.twig', [ 
             'articles' => $articles,
             'category' => $category
         ]);
