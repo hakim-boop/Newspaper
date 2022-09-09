@@ -24,7 +24,7 @@ class ChangePasswordFormType extends AbstractType
                 'type' => PasswordType::class,
                 'first_options' => [
                     'label' => false,
-                    'attr' =>[
+                    'attr' => [
                         'autocomplete' => 'new-password',
                         'placeholder' => 'Nouveau mot de passe'
                     ],
@@ -44,8 +44,7 @@ class ChangePasswordFormType extends AbstractType
                 'attr' => [
                     'class' => 'd-block mx-auto col-7 my-3 btn btn-primary'
                 ]
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
